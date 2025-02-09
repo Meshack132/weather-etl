@@ -48,6 +48,8 @@ Make sure you have the following installed:
    ```sh
    python etl_pipeline.py
    ```
+![image](https://github.com/user-attachments/assets/be70283c-af14-4b52-8172-e4e08a8f2d6a)
+
 
 ## 🔄 Database Schema
 The pipeline creates a table `weather_data` with the following structure:
