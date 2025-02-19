@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, 3.10]  # Specify the Python versions to test
+        python-version: [3.7, 3.8, 3.9, 3.10]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,12 +20,11 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: ${{ matrix.python-version }}
-          # Name of the environment to create/activate
           activate-environment: weather-etl-env
           auto-update-conda: true
-          # If you have an environment.yml in the repo, it will be used to create the environment.
-          # Remove or comment out the next line if you want to install dependencies manually.
-          environment-file: environment.yml
+          # Removed the environment-file parameter since it's not present in the repo.
+          # If you have an environment.yml, you can uncomment the next line.
+          # environment-file: environment.yml
 
       - name: Install package in editable mode
         run: pip install -e .
