@@ -22,9 +22,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           activate-environment: weather-etl-env
           auto-update-conda: true
-          # Removed the environment-file parameter since it's not present in the repo.
-          # If you have an environment.yml, you can uncomment the next line.
-          # environment-file: environment.yml
+          # Disable package cache configuration to avoid the cancellation error.
+          conda-cache: false
 
       - name: Install package in editable mode
         run: pip install -e .
