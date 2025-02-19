@@ -23,6 +23,8 @@ jobs:
           activate-environment: weather-etl-env
           auto-update-conda: true
           conda-cache: false
+          # Force ignoring any local environment file
+          environment-file: ''
 
       - name: Install package in editable mode
         run: pip install -e .
