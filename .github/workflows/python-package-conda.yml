@@ -10,6 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     
@@ -20,15 +21,33 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
+        miniconda-version: "latest"
         activate-environment: weather-etl-env
         auto-activate-base: false
+        auto-update-conda: false
         channels: conda-forge,defaults
+        channel-priority: strict
+        use-only-tar-bz2: true  # More reliable than conda packages
+
+    - name: Cache conda packages
+      uses: actions/cache@v3
+      env:
+        CACHE_NUMBER: 0
+      with:
+        path: |
+          ~/conda_pkgs_dir
+          ${{ env.CONDA }}/pkgs
+        key: conda-${{ runner.os }}-${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}-${{ hashFiles('setup.py') }}
+        restore-keys: |
+          conda-${{ runner.os }}-${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}-
 
     - name: Install dependencies
       shell: bash -l {0}
       run: |
-        conda install --yes --quiet pip
-        pip install -e .[test]
+        conda install --quiet --yes pip
+        conda list
+        pip install --no-cache-dir -e .[test]
+        pip list
 
     - name: Run tests with coverage
       shell: bash -l {0}
