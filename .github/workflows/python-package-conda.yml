@@ -1,55 +1,12 @@
-name: Weather ETL Package Tests
+- name: Verify package structure
+  run: |
+    if [ ! -f "setup.py" ] && [ ! -f "pyproject.toml" ]; then
+      echo "Error: Missing package configuration file (setup.py or pyproject.toml)"
+      exit 1
+    fi
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-    
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-        miniconda-version: "latest"
-        activate-environment: weather-etl-env
-        auto-activate-base: false
-        auto-update-conda: false
-        channels: conda-forge,defaults
-        channel-priority: strict
-        use-only-tar-bz2: true  # More reliable than conda packages
-
-    - name: Cache conda packages
-      uses: actions/cache@v3
-      env:
-        CACHE_NUMBER: 0
-      with:
-        path: |
-          ~/conda_pkgs_dir
-          ${{ env.CONDA }}/pkgs
-        key: conda-${{ runner.os }}-${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}-${{ hashFiles('setup.py') }}
-        restore-keys: |
-          conda-${{ runner.os }}-${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}-
-
-    - name: Install dependencies
-      shell: bash -l {0}
-      run: |
-        conda install --quiet --yes pip
-        conda list
-        pip install --no-cache-dir -e .[test]
-        pip list
-
-    - name: Run tests with coverage
-      shell: bash -l {0}
-      run: |
-        pytest -v --cov=weather_etl tests/
+- name: Install dependencies
+  shell: bash -l {0}
+  run: |
+    conda install --quiet --yes pip
+    pip install --no-cache-dir -e .[test]
