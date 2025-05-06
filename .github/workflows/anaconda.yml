@@ -1,0 +1,40 @@
+name: Anaconda CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: environment.yml
+          auto-activate-base: false
+          activate-environment: weather-etl
+          python-version: 3.10
+
+      - name: Install project dependencies (if not in environment.yml)
+        run: |
+          conda activate weather-etl
+          pip install -e .
+
+      - name: Run tests
+        run: |
+          conda activate weather-etl
+          pytest tests/
+
+      - name: Upload test reports (artifact)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: ./tests
