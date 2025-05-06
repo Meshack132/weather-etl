@@ -1,40 +1,46 @@
-name: Anaconda CI
+name: Python Package (Anaconda)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Conda environment
+      - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
+          activate-environment: weather-etl-env
           environment-file: environment.yml
           auto-activate-base: false
-          activate-environment: weather-etl
-          python-version: 3.10
 
-      - name: Install project dependencies (if not in environment.yml)
+      - name: Install project dependencies
         run: |
-          conda activate weather-etl
+          conda activate weather-etl-env
           pip install -e .
 
       - name: Run tests
         run: |
-          conda activate weather-etl
-          pytest tests/
+          conda activate weather-etl-env
+          pytest tests/ --junitxml=test-results/results.xml
 
-      - name: Upload test reports (artifact)
+      - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: test-report
-          path: ./tests
+          name: test-results
+          path: test-results/results.xml
+
+      - name: Upload Coverage Report (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
