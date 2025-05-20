@@ -1,106 +1,122 @@
 
+
 ```markdown
-# Weather ETL Pipeline 🌦️
+# 🌦️ Weather ETL Pipeline
 
-A Python-based ETL pipeline that extracts weather data from OpenWeatherMap API, transforms it, and loads it into a SQLite database.
+A simple ETL (Extract, Transform, Load) pipeline built with Python to fetch real-time weather data from an external API and store it in a PostgreSQL database.
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![SQLite](https://img.shields.io/badge/SQLite-3.x-green.svg)
+## 📌 Features
 
-## Features ✨
+- 🔄 Fetches live weather data via REST API
+- 🧹 Cleans and transforms raw JSON into structured data
+- 🗃️ Loads the data into a PostgreSQL database
+- 🕒 Automatable for scheduled tasks (e.g. using cron)
 
-- **Real-time weather data extraction** from OpenWeatherMap API
-- **Data cleaning and transformation**
-- **SQL database storage** with automatic table creation
-- **Query interface** to view collected data
-- **Error handling and logging**
-
-## Project Structure 📁
+## 🏗️ Project Structure
 
 ```
+
 weather-etl/
-├── data/               # Database storage
-│   └── weather_data.db
-├── etl/                # ETL components
-│   ├── extract.py
-│   ├── transform.py
-│   └── __init__.py
-├── Config/             # Configuration
-│   └── config.yaml
-├── logs/               # Log files
-├── .env                # API keys
-├── main.py             # Main pipeline
-└── query_data.py       # Data viewer
-```
+├── config.py          # API keys and DB credentials
+├── extract.py         # Extracts data from weather API
+├── transform.py       # Cleans and processes raw data
+├── load.py            # Inserts data into PostgreSQL
+├── main.py            # Main entry point for ETL execution
+├── requirements.txt   # Dependencies
+└── README.md          # Project documentation
 
-## Installation ⚙️
+````
 
-1. Clone the repository:
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Meshack132/weather-etl.git
 cd weather-etl
-```
+````
 
-2. Create and activate virtual environment:
+### 2. Install dependencies
+
+Create a virtual environment (optional but recommended):
+
 ```bash
 python -m venv venv
-venv\Scripts\activate  # Windows
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 ```
 
-3. Install dependencies:
+Then install the dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## Configuration ⚙️
+### 3. Configure API and DB
 
-1. Create `.env` file:
-```ini
-OPENWEATHER_API_KEY=your_api_key_here
-```
+Update `config.py` with your:
 
-2. Edit `Config/config.yaml`:
-```yaml
-city: "London"
-units: "metric"
-```
+* API key
+* PostgreSQL credentials
+* City or location of interest
 
-## Usage 🚀
+### 4. Run the ETL process
 
-1. Run the ETL pipeline:
 ```bash
 python main.py
 ```
 
-2. Query the database:
-```bash
-python data/query_data.py
+## 🛠️ Tech Stack
+
+* Python 3.x
+* Requests
+* psycopg2 (PostgreSQL connector)
+* PostgreSQL
+
+## ✅ Example Output
+
+Weather data is stored in a `weather_data` table with columns like:
+
+* `timestamp`
+* `temperature`
+* `humidity`
+* `pressure`
+* `description`
+* `location`
+
+## 📅 Automation
+
+This ETL pipeline can be scheduled to run periodically using:
+
+* `cron` (Linux/macOS)
+* `Task Scheduler` (Windows)
+* Cloud scheduler like AWS Lambda + CloudWatch or Azure Functions
+
+## 🧠 Future Improvements
+
+* Add error logging and retry logic
+* Store historical data in S3 or data lake
+* Visualize data in a dashboard (e.g., Power BI, Grafana)
+
+## 🤝 Contributing
+
+Pull requests are welcome! If you'd like to contribute:
+
+1. Fork the repo
+2. Create a new branch
+3. Make changes and commit
+4. Push to your fork
+5. Create a Pull Request
+
+## 🧾 License
+
+This project is licensed under the MIT License.
+
+---
+
+Built with ❤️ by [Meshack Mthimkhulu](https://github.com/Meshack132)
+
 ```
 
-## Example Output 📊
+---
 
 ```
-Weather Data ETL Pipeline (SQL Version)
-========================================
-
-Processing weather data for: London
-
-Success! Data saved to SQL database
-Database: data\weather_data.db
-Table: weather_observations
-
-Latest Weather Data (10 most recent):
-id | city   | temperature | humidity | description     | time
-1  | London |        20.6 |       37 | overcast clouds | 2025-05-20 18:35
-```
-
-## Contributing 🤝
-
-Pull requests are welcome! For major changes, please open an issue first.
-
-## License 📄
-
-[MIT](https://choosealicense.com/licenses/mit/)
-```
-
-
