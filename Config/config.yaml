@@ -1,0 +1,4 @@
+
+api_key: ${OPENWEATHER_API_KEY} 
+city: "London"
+units: "metric"
