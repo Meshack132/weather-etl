@@ -1,4 +1,3 @@
-Here's a comprehensive `README.md` file for your weather-ETL project:
 
 ```markdown
 # Weather ETL Pipeline 🌦️
